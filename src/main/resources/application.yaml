@@ -1,0 +1,20 @@
+server:
+  port: 9002
+spring:
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:3309/rideshare
+    username: root
+    password: t00R
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+app:
+  service-charge: 200
+  charge-per-km: 20
+
+location-service:
+  url: http://localhost:9001/api/v1
+  timeout: 2000
