@@ -1,5 +1,7 @@
 server:
   port: 9002
+  allowed_origins: http://localhost:4200
+
 spring:
   jpa:
     show-sql: true
