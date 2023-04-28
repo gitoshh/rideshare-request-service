@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.gitoshh.ride-share</groupId>
 	<artifactId>RequestService</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>RequestService</name>
 	<description>Auth service for ride-share</description>
 	<properties>
@@ -61,6 +61,11 @@
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
