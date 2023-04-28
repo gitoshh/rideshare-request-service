@@ -8,19 +8,26 @@ import com.gitoshh.rideshare.RequestService.request.RideRequestCreateRequest;
 import com.gitoshh.rideshare.RequestService.response.LocatorResponse;
 import com.gitoshh.rideshare.RequestService.response.RideRequestResponse;
 import com.gitoshh.rideshare.RequestService.types.RideRequestStatus;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Service
-public record RideRequestService(RideRequestRepository rideRequestRepository, WebClient.Builder webClient, CostingService costingService) {
-    @Value("${location-service.url}")
-    private static String locationServiceUrl;
+@Log4j2
+@RequiredArgsConstructor
+public class RideRequestService {
+    private final RideRequestRepository rideRequestRepository;
+    private final CostingService costingService;
+
+    private final WebClient.Builder webClient;
+
+    @Value("${location.url}")
+    private String locationServiceUrl;
 
     /**
      * Create a new ride request.
@@ -41,6 +48,8 @@ public record RideRequestService(RideRequestRepository rideRequestRepository, We
         rideRequestRepository.save(rideRequest);
 
         LocatorResponse locatedDriver = fetchClosestRide(rideRequestCreateRequest.startLatitude(), rideRequestCreateRequest.startLongitude());
+
+        log.info("Located driver: " + locatedDriver);
         double cost = costingService.calculateCost(rideRequestCreateRequest.startLatitude(), rideRequestCreateRequest.startLongitude(), rideRequestCreateRequest.endLatitude(), rideRequestCreateRequest.endLongitude());
 
 
@@ -141,14 +150,15 @@ public record RideRequestService(RideRequestRepository rideRequestRepository, We
     public LocatorResponse fetchClosestRide(double latitude, double longitude) {
         LocatorRequest locatorRequest = new LocatorRequest(latitude, longitude);
 
+        log.info(locationServiceUrl + "/locations/closest-driver");
+
         return webClient.build()
                 .post()
-                .uri(locationServiceUrl + "/locations/closest")
-                .body(locatorRequest, LocatorRequest.class)
-                .accept(MediaType.APPLICATION_JSON)
+                .uri(locationServiceUrl + "/locations/closest-driver")
+                .bodyValue(locatorRequest)
                 .retrieve()
                 .bodyToMono(LocatorResponse.class)
-                .timeout(Duration.ofMillis(5000))
                 .block();
+
     }
 }
