@@ -1,6 +1,6 @@
 server:
   port: 9002
-  allowed_origins: http://localhost:4200
+  allowed_origins: http://localhost:4200,http://localhost:9000
 
 spring:
   rabbitmq:
@@ -21,8 +21,8 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
 
 app:
-  service-charge: 200
-  charge-per-km: 20
+  serviceCharge: 200
+  chargePerKm: 00.2
 
 location:
   url: http://localhost:9000/api/v1

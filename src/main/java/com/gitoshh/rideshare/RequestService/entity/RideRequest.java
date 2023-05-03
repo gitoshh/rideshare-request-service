@@ -67,4 +67,14 @@ public class RideRequest {
     public int hashCode() {
         return getClass().hashCode();
     }
+
+    public RideRequest accept() {
+        this.status = RideRequestStatus.ACCEPTED;
+        return this;
+    }
+
+    public RideRequest reject() {
+        this.status = RideRequestStatus.REJECTED;
+        return this;
+    }
 }

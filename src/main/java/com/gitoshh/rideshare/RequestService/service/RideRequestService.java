@@ -1,7 +1,10 @@
 package com.gitoshh.rideshare.RequestService.service;
 
+import com.gitoshh.rideshare.RequestService.entity.RideMatch;
+import com.gitoshh.rideshare.RequestService.entity.RideMatchStatus;
 import com.gitoshh.rideshare.RequestService.entity.RideRequest;
 import com.gitoshh.rideshare.RequestService.exception.NotFoundException;
+import com.gitoshh.rideshare.RequestService.repo.RideMatchRepository;
 import com.gitoshh.rideshare.RequestService.repo.RideRequestRepository;
 import com.gitoshh.rideshare.RequestService.request.LocatorRequest;
 import com.gitoshh.rideshare.RequestService.request.RideRequestCreateRequest;
@@ -22,6 +25,8 @@ import java.time.LocalDateTime;
 public class RideRequestService {
     private final RideRequestRepository rideRequestRepository;
     private final CostingService costingService;
+
+    private final RideMatchRepository rideMatchRepository;
 
     private final WebClient.Builder webClient;
 
@@ -47,10 +52,14 @@ public class RideRequestService {
         rideRequestRepository.save(rideRequest);
 
         LocatorResponse locatedDriver = fetchClosestRide(rideRequestCreateRequest.startLatitude(), rideRequestCreateRequest.startLongitude());
-
-        log.info("Located driver: " + locatedDriver);
         double cost = costingService.calculateCost(rideRequestCreateRequest.startLatitude(), rideRequestCreateRequest.startLongitude(), rideRequestCreateRequest.endLatitude(), rideRequestCreateRequest.endLongitude());
 
+        rideMatchRepository.save(RideMatch.builder()
+                .rideRequestId(rideRequest.getId())
+                .driverId(locatedDriver.userId())
+                .cost(cost)
+                .status(RideMatchStatus.PENDING)
+                .build());
 
         return RideRequestResponse.builder().
                 id(rideRequest.getId())

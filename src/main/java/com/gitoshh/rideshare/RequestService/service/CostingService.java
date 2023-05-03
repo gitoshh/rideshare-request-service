@@ -1,19 +1,21 @@
 package com.gitoshh.rideshare.RequestService.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+@Log4j2
 @Component
 @RequiredArgsConstructor
 public class CostingService {
     private final LocationService locationService;
 
-    @Value("${app.charge-per-km}")
-    private static double chargePerKm;
+    @Value("${app.chargePerKm}")
+    private double chargePerKm;
 
-    @Value("${app.service-charge}")
-    private static double serviceCharge;
+    @Value("${app.serviceCharge}")
+    private double serviceCharge;
 
     /**
      * Calculate cost of a ride given distance in kilometers
@@ -22,7 +24,8 @@ public class CostingService {
      * @return cost in shilling
      */
     public double calculateCost(double distance) {
-        return distance * chargePerKm + serviceCharge;
+        double cost = distance * chargePerKm + serviceCharge;
+        return Math.floor(cost);
     }
 
     /**

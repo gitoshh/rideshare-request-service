@@ -1,7 +1,33 @@
+environment:
+  name: local
+server:
+  port: 9002
+  allowed_origins: http://localhost:4200
+
 spring:
   datasource:
     url: jdbc:h2:mem:test
+
   jpa:
+    showSql: true
+    hibernate:
+      ddl-auto: create-drop
     properties:
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    queue:
+      name: teste
+
+app:
+  service-charge: 200
+  charge-per-km: 20
+
+location:
+  url: http://localhost:9000/api/v1
+  timeout: 2000

@@ -29,6 +29,7 @@ public class SecurityConfig {
                 .disable()
                 .authorizeHttpRequests()
                 .requestMatchers("/api/v1/ride-requests/**").permitAll()
+                .requestMatchers("/api/v1/ride-matches/**").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
