@@ -2,17 +2,14 @@ package com.gitoshh.rideshare.RequestService.service;
 
 
 import com.gitoshh.rideshare.RequestService.entity.RideMatch;
-import com.gitoshh.rideshare.RequestService.entity.RideMatchStatus;
 import com.gitoshh.rideshare.RequestService.entity.RideRequest;
 import com.gitoshh.rideshare.RequestService.exception.NotFoundException;
 import com.gitoshh.rideshare.RequestService.repo.RideMatchRepository;
 import com.gitoshh.rideshare.RequestService.repo.RideRequestRepository;
-import com.gitoshh.rideshare.RequestService.types.RideRequestStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -33,7 +30,7 @@ public class RideMatchService {
 
         // Set the ride request as accepted
         RideRequest rideRequest = rideRequestRepository.findById(rideMatch.getRideRequestId()).orElseThrow(()-> new NotFoundException("Ride request not found"));
-        rideRequest.accept();
+        rideRequest.accept(rideMatch.getDriverId());
         rideRequestRepository.save(rideRequest);
 
         return rideMatch;
@@ -43,11 +40,6 @@ public class RideMatchService {
         RideMatch rideMatch = rideMatchRepository.findById(id).orElseThrow(() -> new NotFoundException("Ride match not found"));
         rideMatch.reject();
         rideMatchRepository.save(rideMatch);
-
-        // Set the ride request as accepted
-        RideRequest rideRequest = rideRequestRepository.findById(rideMatch.getRideRequestId()).orElseThrow(()-> new NotFoundException("Ride request not found"));
-        rideRequest.reject();
-        rideRequestRepository.save(rideRequest);
 
         return rideMatch;
     }

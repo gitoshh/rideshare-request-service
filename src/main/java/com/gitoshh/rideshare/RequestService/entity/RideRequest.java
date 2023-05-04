@@ -47,6 +47,7 @@ public class RideRequest {
     private double endLongitude;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private RideRequestStatus status;
 
     @CreationTimestamp
@@ -68,13 +69,9 @@ public class RideRequest {
         return getClass().hashCode();
     }
 
-    public RideRequest accept() {
+    public RideRequest accept(Long driverId) {
         this.status = RideRequestStatus.ACCEPTED;
-        return this;
-    }
-
-    public RideRequest reject() {
-        this.status = RideRequestStatus.REJECTED;
+        this.driverId = driverId;
         return this;
     }
 }

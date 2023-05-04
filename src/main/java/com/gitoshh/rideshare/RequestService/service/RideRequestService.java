@@ -1,7 +1,7 @@
 package com.gitoshh.rideshare.RequestService.service;
 
 import com.gitoshh.rideshare.RequestService.entity.RideMatch;
-import com.gitoshh.rideshare.RequestService.entity.RideMatchStatus;
+import com.gitoshh.rideshare.RequestService.types.RideMatchStatus;
 import com.gitoshh.rideshare.RequestService.entity.RideRequest;
 import com.gitoshh.rideshare.RequestService.exception.NotFoundException;
 import com.gitoshh.rideshare.RequestService.repo.RideMatchRepository;
@@ -168,5 +168,16 @@ public class RideRequestService {
                 .bodyToMono(LocatorResponse.class)
                 .block();
 
+    }
+
+    /**
+     * Get ride request by id.
+     * @param id The id of the ride request to fetch.
+     * @return The fetched ride request.
+     */
+    public RideRequest getRideRequestById(Long id) {
+        return rideRequestRepository.findById(id).orElseThrow(
+                () ->
+                        new NotFoundException("Ride request not found"));
     }
 }

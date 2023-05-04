@@ -1,10 +1,13 @@
 package com.gitoshh.rideshare.RequestService.entity;
 
-import com.gitoshh.rideshare.RequestService.types.RideRequestStatus;
+import com.gitoshh.rideshare.RequestService.types.RideMatchStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -29,6 +32,12 @@ public class RideMatch {
 
     @Enumerated(EnumType.STRING)
     private RideMatchStatus status;
+
+    @CreationTimestamp
+    public LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    public LocalDateTime updatedAt;
 
     @Override
     public boolean equals(Object o) {

@@ -1,4 +1,4 @@
-package com.gitoshh.rideshare.RequestService.entity;
+package com.gitoshh.rideshare.RequestService.types;
 
 public enum RideMatchStatus {
     PENDING,

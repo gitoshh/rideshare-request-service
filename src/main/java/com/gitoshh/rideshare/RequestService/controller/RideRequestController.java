@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/ride-requests")
 public record RideRequestController(RideRequestService rideRequestService) {
 
+    @GetMapping("/{id}")
+    public ResponseEntity<RideRequest> getRideRequestById(@PathVariable Long id) {
+        return ResponseEntity.ok(rideRequestService.getRideRequestById(id));
+    }
     @PostMapping
     public ResponseEntity<RideRequestResponse> createRideRequest(
             @Valid @RequestBody RideRequestCreateRequest rideRequestCreateRequest
